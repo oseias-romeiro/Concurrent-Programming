@@ -8,3 +8,4 @@ Técnicas de programação concorrente e problemas clássicos
 - [Produtores x Consumidores](src/produtores_consumidores.c)
 - [Travessia dos macacos](src/macacos.c)
 - [Canibais e o cozinheiro](src/canibais.c)
+- [Pista de F1](src/pistaF1.c)
