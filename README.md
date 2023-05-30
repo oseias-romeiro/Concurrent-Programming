@@ -9,3 +9,4 @@ Técnicas de programação concorrente e problemas clássicos
 - [Travessia dos macacos](src/macacos.c)
 - [Canibais e o cozinheiro](src/canibais.c)
 - [Pista de F1](src/pistaF1.c)
+- [Barbeiro dorminhoco](src/barbeiro_dorminhoco.c)
