@@ -7,73 +7,70 @@
 
 #define N 5
 #define ESQ(id) (id)
-#define DIR(id) (id + 1) % N
+#define DIR(id)	(id+1)%N
+#define PENSANDO 0
+#define FAMINTO 1
+#define COMENDO 2
 
+int estados[N];
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 sem_t s[N];
 
-void *filosofos(void *arg);
+void *filosofos (void *arg);
+void pega_talher (int n);
+void devolve_talher (int n);
+void teste (int n);
 
-void pega_talher(int n);
-void devolve_talher(int n);
-
-int main()
-{
+int main () {
     int i;
-    int *id;
-    // semaforo
-    for (i = 0; i < N; i++)
-    {
-        sem_init(&s[i], 0, 1);
+    int *id; 	//semaforo
+    for (i=0; i<N; i++) {
+        sem_init(&(s[i]), 0, 0);
     }
-    pthread_t r[N];
-
-    // criacao das threads de filosofos
-    for (i = 0; i < N; i++)
-    {
-        id = (int *)malloc(sizeof(int));
+    pthread_t r[N]; 	//criacao das threads de filosofos
+    for (i = 0; i < N ; i++) {
+        id = (int *) malloc(sizeof(int));
         *id = i;
-        pthread_create(&r[i], NULL, filosofos, (void *)(id));
+        pthread_create(&r[i], NULL, filosofos, (void*) (id));
     }
-
-    pthread_join(r[0], NULL);
+    pthread_join(r[0],NULL);
+    
     return 0;
 }
 
-void *filosofos(void *arg)
-{
-    int n = *((int *)arg);
-    while (1)
-    {
-        // pensar
-        printf("Filosofo %d pensando ...\n", n);
+void * filosofos (void *arg) {
+    int n = *((int *) arg);
+    while(1) {
+        printf("Filosofo %d PENSANDO\n", n);
         sleep(3);
         pega_talher(n);
-        // comer
-        printf("\tFilosofo %d comendo ...\n", n);
+        printf("Filosofo %d COMENDO\n", n);
         sleep(3);
-        printf("\tFilosofo %d acabou de comer ...\n", n);
+        printf("Filosofo %d CHEIO\n", n);
         devolve_talher(n);
     }
 }
 
-void pega_talher(int n)
-{
-    if (n == 4)
-    {
-        sem_wait(&s[DIR(n)]);
-        sleep(1);
-        sem_wait(&s[ESQ(n)]);
-    }
-    else
-    {
-        sem_wait(&s[ESQ(n)]);
-        sleep(1);
-        sem_wait(&s[DIR(n)]);
-    }
+void pega_talher (int n) {
+    pthread_mutex_lock(&lock);
+    estados[n] = FAMINTO;
+    teste(n);
+    pthread_mutex_unlock(&lock);
+    sem_wait(&s[n]);
 }
 
-void devolve_talher(int n)
-{
-    sem_post(&s[ESQ(n)]);
-    sem_post(&s[DIR(n)]);
+void devolve_talher (int n) {
+    pthread_mutex_lock(&lock);
+    estados[n] = PENSANDO;
+    teste(ESQ(n));
+    teste(DIR(n));
+    pthread_mutex_unlock(&lock);
 }
+
+void teste (int n) {
+    if(estados[n] == FAMINTO && estados[ESQ(n)] != COMENDO	&& estados[DIR(n)] != COMENDO) 	{
+        estados[n] = COMENDO;
+        sem_post(&s[n]);
+    }
+} 
+
