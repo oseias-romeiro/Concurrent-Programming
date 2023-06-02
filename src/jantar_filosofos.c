@@ -6,7 +6,7 @@
 #include <semaphore.h>
 
 #define N 5
-#define ESQ(id) (id)
+#define ESQ(id) (id+N-1)%N
 #define DIR(id)	(id+1)%N
 #define PENSANDO 0
 #define FAMINTO 1
