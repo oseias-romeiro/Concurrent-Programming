@@ -11,3 +11,5 @@ Técnicas de programação concorrente e problemas clássicos
 - [Pista de F1](src/pistaF1.c)
 - [Barbeiro dorminhoco](src/barbeiro_dorminhoco.c)
 - [Jantar dos filósofos](src/jantar_filosofos.c)
+- [Pombo Correios](src/pombo_correios.c)
+
