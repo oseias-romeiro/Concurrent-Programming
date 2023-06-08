@@ -48,6 +48,7 @@ void * f_pombo(void *arg){
         //Leva as cartas para B e volta para A
         printf("pombo entregando cartas\n");
         sleep(5);
+        contador_cartas=0;
         //Acordar os usuarios
         for (int i = 0; i < CARTAS; i++)
             sem_post(&pombo_cartas);
@@ -58,17 +59,15 @@ void * f_pombo(void *arg){
 void * f_usuario(void *arg){
     int id = *((int*) arg);
     while(1){
-        sleep(1);
-        sem_wait(&mutex);
-	    //Escreve uma carta
-        printf("usuario %d escrevendo carta\n", id);
         sleep(2);
-
-        //Caso o pombo nao esteja em A ou a mochila estiver cheia, entao dorme	
-        sem_wait(&pombo_dormindo);
+        sem_wait(&pombo_cartas);
+        sem_wait(&mutex);
+	    //Escreve uma carta e posta sua carta na mochila do pombo
+        printf("usuario %d escrevendo carta\n", id);
         contador_cartas++;
+        sleep(1);
         
-        //Posta sua carta na mochila do pombo
+        // acorda o pombo caso tenha chegado no limite de cartas
         printf("usuario %d postando carta\n", id);
         if (contador_cartas >= CARTAS) {
             sem_post(&pombo_dormindo);
