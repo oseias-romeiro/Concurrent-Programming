@@ -12,4 +12,4 @@ Técnicas de programação concorrente e problemas clássicos
 - [Barbeiro dorminhoco](src/barbeiro_dorminhoco.c)
 - [Jantar dos filósofos](src/jantar_filosofos.c)
 - [Pombo Correios](src/pombo_correios.c)
-
+- [Soma dos elementos de uma matriz](src/matriz_soma_barreira.c)
